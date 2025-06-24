@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    ports:
+      - "3033:3033"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: Password@12345
+      DB_NAME: new_employee_db
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    ports:
+      - "7098:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  hr_page:
+    build:
+      context: ./HR_Page
+      dockerfile: Dockerfile
+    ports:
+      - "7099:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:13
+    container_name: postgres11
+    ports:
+      - "5113:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Password@12345
+      POSTGRES_DB: new_employee_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  db_data:
+
+networks:
+  app-network:
+
