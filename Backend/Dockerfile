@@ -11,6 +11,6 @@ RUN npm install
 # Copy the rest of the application
 COPY . .
 
-EXPOSE 3000
+EXPOSE 3033
 
 CMD ["node", "server.js"]]
